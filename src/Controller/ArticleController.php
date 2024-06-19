@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,13 +12,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ArticleController extends AbstractController
 {
-    #[Route('/article', name: 'app_article')]
-    public function index(): JsonResponse
+    #[Route('/articles', name: 'articles')]
+    public function index(ArticleRepository $articleRepository)
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/ArticleController.php',
-        ]);
+        $articles=$articleRepository->findAll();
+        return $this->render('home.html.twig',[
+            'articles'=> $articles
+
+        ]
+        );
     }
     
     #[Route('/article/add', name: 'create_product')]
@@ -38,3 +41,5 @@ class ArticleController extends AbstractController
     }
 
 }
+
+
